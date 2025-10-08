@@ -1,6 +1,6 @@
 name: easy_bubble_container
 description: A customizable chat bubble container with rounded corners and directional arrow.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/YimaPhilemon/easy_bubble_container
 
 environment:
