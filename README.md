@@ -1,7 +1,6 @@
-# my_package
+# easy_bubble_container
 
-A Flutter package that provides [briefly describe what it does, e.g.] 
-custom animated message bubbles for chat interfaces.
+A customizable chat bubble container with rounded corners and directional arrow.
 
 ## Features
 - Clean, customizable design
