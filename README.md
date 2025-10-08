@@ -12,3 +12,14 @@ Add this to your `pubspec.yaml`:
 ```yaml
 dependencies:
   easy_bubble_container: ^0.0.3
+
+## 🧩 API Reference
+
+### `BubbleContainer`
+
+A customizable chat-style container widget that draws a rounded rectangle with an optional directional arrow.  
+Useful for chat bubbles, tooltips, or message UI elements.
+
+```dart
+import 'package:easy_bubble_container/easy_bubble_container.dart';
+
