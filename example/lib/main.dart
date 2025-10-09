@@ -1,4 +1,4 @@
-import 'package:easy_bubble_container/bubble_container.dart';
+import 'package:easy_bubble_container/easy_bubble_container.dart';
 import 'package:flutter/material.dart';
 
 void main() {
