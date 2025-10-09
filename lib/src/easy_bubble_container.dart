@@ -1,17 +1,51 @@
 import 'package:flutter/material.dart';
 
+/// Defines which side of the bubble the arrow will appear on.
 enum BubbleSide { top, bottom, left, right }
 
+/// A customizable chat-style container widget that draws a rounded
+/// rectangle with an optional directional arrow.
+///
+/// Useful for chat messages, tooltips, or callouts.
+///
+/// Example:
+/// ```dart
+/// BubbleContainer(
+///   color: Colors.blue[100]!,
+///   side: BubbleSide.left,
+///   arrowPosition: 0.5,
+///   child: Text("Hello there!"),
+/// )
+/// ```
 class BubbleContainer extends StatelessWidget {
+  /// The widget displayed inside the bubble.
   final Widget child;
+
+  /// The size (length) of the triangular arrow.
   final double arrowSize;
+
+  /// The corner radius of the rounded rectangle.
   final double borderRadius;
+
+  /// The curvature of the arrow tip (rounded edges).
   final double arrowRadius;
+
+  /// The background color of the bubble.
   final Color color;
+
+  /// The color of the bubble border.
   final Color borderColor;
+
+  /// The width of the border stroke.
   final double borderWidth;
+
+  /// The side where the arrow should appear.
   final BubbleSide side;
-  final double arrowPosition; // 0.0 - 1.0
+
+  /// The arrow’s relative position along its side (0.0 = start, 1.0 = end).
+  final double arrowPosition;
+
+  /// Internal padding around the [child].
   final EdgeInsets padding;
 
   const BubbleContainer({
@@ -41,6 +75,7 @@ class BubbleContainer extends StatelessWidget {
         side: side,
         arrowPosition: arrowPosition,
       ),
+      // Adjust padding so child is not covered by the arrow
       child: Padding(
         padding: EdgeInsets.only(
           top: padding.top + (side == BubbleSide.top ? arrowSize : 0),
@@ -54,10 +89,12 @@ class BubbleContainer extends StatelessWidget {
   }
 }
 
+/// Handles drawing of the bubble shape, including the rounded rectangle
+/// and directional arrow.
 class _BubblePainter extends CustomPainter {
   final double arrowSize;
   final double borderRadius;
-  final double arrowRadius; // Using your existing parameter name
+  final double arrowRadius;
   final Color color;
   final Color borderColor;
   final double borderWidth;
@@ -83,13 +120,16 @@ class _BubblePainter extends CustomPainter {
           ..color = color
           ..style = PaintingStyle.fill;
 
+    // Clamp the arrow position between 0 and 1
     final arrowPos = arrowPosition.clamp(0.0, 1.0);
 
+    // Define the drawable bounds (accounting for border width)
     double left = borderWidth / 2;
     double top = borderWidth / 2;
     double right = size.width - borderWidth / 2;
     double bottom = size.height - borderWidth / 2;
 
+    // Draw bubble shape based on which side the arrow should appear
     switch (side) {
       case BubbleSide.top:
         _buildTopArrow(path, left, top, right, bottom, arrowPos);
@@ -105,8 +145,10 @@ class _BubblePainter extends CustomPainter {
         break;
     }
 
+    // Fill the bubble background
     canvas.drawPath(path, paint);
 
+    // Draw the border if specified
     if (borderWidth > 0) {
       final borderPaint =
           Paint()
@@ -117,6 +159,7 @@ class _BubblePainter extends CustomPainter {
     }
   }
 
+  /// Calculates the X position for horizontally aligned arrows.
   double _calculateHorizontalArrowX(double l, double r, double pos) {
     final minX = l + borderRadius + arrowSize;
     final maxX = r - borderRadius - arrowSize;
@@ -125,6 +168,7 @@ class _BubblePainter extends CustomPainter {
     return minX + availableLength * pos;
   }
 
+  /// Calculates the Y position for vertically aligned arrows.
   double _calculateVerticalArrowY(double t, double b, double pos) {
     final minY = t + borderRadius + arrowSize;
     final maxY = b - borderRadius - arrowSize;
@@ -133,9 +177,7 @@ class _BubblePainter extends CustomPainter {
     return minY + availableLength * pos;
   }
 
-  // NOTE: Removed _drawRoundedArrow as it caused complex geometry issues.
-  // We use direct lineTo/arcToPoint logic in the builders.
-
+  /// Builds a bubble with an arrow on the top.
   void _buildTopArrow(
     Path path,
     double l,
@@ -146,12 +188,13 @@ class _BubblePainter extends CustomPainter {
   ) {
     final bodyTop = t + arrowSize;
     final arrowX = _calculateHorizontalArrowX(l, r, pos);
-    final arcR = arrowRadius.clamp(0.0, arrowSize); // Clamp radius to arrowSize
+    final arcR = arrowRadius.clamp(0.0, arrowSize);
 
+    // Start bottom-left of the top arc
     path.moveTo(l + borderRadius, bodyTop);
     path.lineTo(arrowX - arrowSize, bodyTop);
 
-    // Rounded Tip Logic
+    // Draw arrow tip
     path.lineTo(arrowX - arcR, t + arcR);
     path.arcToPoint(
       Offset(arrowX + arcR, t + arcR),
@@ -160,6 +203,7 @@ class _BubblePainter extends CustomPainter {
     );
     path.lineTo(arrowX + arrowSize, bodyTop);
 
+    // Continue drawing rounded rectangle
     path.lineTo(r - borderRadius, bodyTop);
     path.arcToPoint(
       Offset(r, bodyTop + borderRadius),
@@ -183,6 +227,7 @@ class _BubblePainter extends CustomPainter {
     path.close();
   }
 
+  /// Builds a bubble with an arrow on the bottom.
   void _buildBottomArrow(
     Path path,
     double l,
@@ -196,6 +241,7 @@ class _BubblePainter extends CustomPainter {
     final arcR = arrowRadius.clamp(0.0, arrowSize);
     final bodyTop = t + arrowSize;
 
+    // Draw rectangle body and top arc
     temp.moveTo(l + borderRadius, b);
     temp.arcToPoint(
       Offset(l, b - borderRadius),
@@ -207,6 +253,7 @@ class _BubblePainter extends CustomPainter {
       radius: Radius.circular(borderRadius),
     );
 
+    // Draw arrow shape
     temp.lineTo(arrowCenterX - arrowSize, bodyTop);
     if (arcR > 0) {
       temp.arcToPoint(
@@ -225,6 +272,7 @@ class _BubblePainter extends CustomPainter {
     }
     temp.lineTo(arrowCenterX + arrowSize, bodyTop);
 
+    // Complete rectangle path
     temp.lineTo(r - borderRadius, bodyTop);
     temp.arcToPoint(
       Offset(r, bodyTop + borderRadius),
@@ -237,7 +285,7 @@ class _BubblePainter extends CustomPainter {
     );
     temp.close();
 
-    // Mirror vertically around the midline between top and bottom
+    // Mirror vertically to make the arrow point downward
     final matrix =
         Matrix4.identity()
           ..translate(0.0, t + (b - t))
@@ -245,6 +293,7 @@ class _BubblePainter extends CustomPainter {
     path.addPath(temp.transform(matrix.storage), Offset.zero);
   }
 
+  /// Builds a bubble with an arrow on the left side.
   void _buildLeftArrow(
     Path path,
     double l,
@@ -272,10 +321,9 @@ class _BubblePainter extends CustomPainter {
       Offset(bodyLeft, b - borderRadius),
       radius: Radius.circular(borderRadius),
     );
-
     path.lineTo(bodyLeft, arrowY + arrowSize);
 
-    // Rounded Tip Logic
+    // Draw rounded arrow tip
     path.lineTo(l + arcR, arrowY + arcR);
     path.arcToPoint(
       Offset(l + arcR, arrowY - arcR),
@@ -284,6 +332,7 @@ class _BubblePainter extends CustomPainter {
     );
     path.lineTo(bodyLeft, arrowY - arrowSize);
 
+    // Close top-left corner
     path.lineTo(bodyLeft, t + borderRadius);
     path.arcToPoint(
       Offset(bodyLeft + borderRadius, t),
@@ -292,6 +341,7 @@ class _BubblePainter extends CustomPainter {
     path.close();
   }
 
+  /// Builds a bubble with an arrow on the right side.
   void _buildRightArrow(
     Path path,
     double l,
@@ -305,6 +355,7 @@ class _BubblePainter extends CustomPainter {
     final arcR = arrowRadius.clamp(0.0, arrowSize);
     final bodyLeft = l + arrowSize;
 
+    // Build path similar to left arrow
     temp.moveTo(r - borderRadius, t);
     temp.arcToPoint(
       Offset(r, t + borderRadius),
@@ -320,8 +371,9 @@ class _BubblePainter extends CustomPainter {
       Offset(bodyLeft, b - borderRadius),
       radius: Radius.circular(borderRadius),
     );
-
     temp.lineTo(bodyLeft, arrowCenterY + arrowSize);
+
+    // Rounded arrow tip
     if (arcR > 0) {
       temp.arcToPoint(
         Offset(bodyLeft - arcR, arrowCenterY + arrowSize - arcR),
@@ -347,7 +399,7 @@ class _BubblePainter extends CustomPainter {
     );
     temp.close();
 
-    // --- Mirror the left arrow horizontally around the center of the rect ---
+    // Mirror horizontally so the arrow points right
     final matrix =
         Matrix4.identity()
           ..translate(l + (r - l))
