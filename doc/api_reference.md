@@ -62,10 +62,3 @@ BubbleContainer(
 💡 Tip
 
 You can combine BubbleContainer with Row, Column, or Wrap to create chat layouts, tooltips, or speech bubbles for avatars.
-
-
----
-
-✅ This version is **fully compliant** with pub.dev formatting — no image links, clean markdown tables, and formatted code blocks.  
-
-Would you like me to also make a **matching `README.md`** that links to this API reference and includes a sample runnable example for Android and Windows?
