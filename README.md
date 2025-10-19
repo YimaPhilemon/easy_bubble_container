@@ -30,7 +30,8 @@ A customizable chat bubble container with rounded corners and directional arrow.
 Add this to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  easy_bubble_container: ^0.0.5
+  easy_bubble_container: ^0.0.6
+  ```
 
 ## 🧩 API Reference
 
@@ -41,4 +42,5 @@ Useful for chat bubbles, tooltips, or message UI elements.
 
 ```dart
 import 'package:easy_bubble_container/easy_bubble_container.dart';
+```
 

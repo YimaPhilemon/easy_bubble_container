@@ -288,7 +288,9 @@ class _BubblePainter extends CustomPainter {
     // Mirror vertically to make the arrow point downward
     final matrix =
         Matrix4.identity()
+          // ignore: deprecated_member_use
           ..translate(0.0, t + (b - t))
+          // ignore: deprecated_member_use
           ..scale(1.0, -1.0);
     path.addPath(temp.transform(matrix.storage), Offset.zero);
   }
@@ -402,7 +404,9 @@ class _BubblePainter extends CustomPainter {
     // Mirror horizontally so the arrow points right
     final matrix =
         Matrix4.identity()
+          // ignore: deprecated_member_use
           ..translate(l + (r - l))
+          // ignore: deprecated_member_use
           ..scale(-1.0, 1.0);
     path.addPath(temp.transform(matrix.storage), Offset.zero);
   }

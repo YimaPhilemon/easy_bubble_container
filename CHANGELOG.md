@@ -1,3 +1,9 @@
+## 0.0.6
+
+* updated README for pub.dev compatibility.
+
+---
+
 ## 0.0.4
 
 * Added full Windows and Android example app for testing and showcasing usage.
