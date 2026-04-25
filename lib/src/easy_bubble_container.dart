@@ -196,11 +196,15 @@ class _BubblePainter extends CustomPainter {
 
     // Draw arrow tip
     path.lineTo(arrowX - arcR, t + arcR);
-    path.arcToPoint(
-      Offset(arrowX + arcR, t + arcR),
-      radius: Radius.circular(arcR),
-      clockwise: true,
-    );
+    if (arcR > 0) {
+      path.arcToPoint(
+        Offset(arrowX + arcR, t + arcR),
+        radius: Radius.circular(arcR),
+        clockwise: true,
+      );
+    } else {
+      path.lineTo(arrowX, t);
+    }
     path.lineTo(arrowX + arrowSize, bodyTop);
 
     // Continue drawing rounded rectangle
@@ -327,11 +331,15 @@ class _BubblePainter extends CustomPainter {
 
     // Draw rounded arrow tip
     path.lineTo(l + arcR, arrowY + arcR);
-    path.arcToPoint(
-      Offset(l + arcR, arrowY - arcR),
-      radius: Radius.circular(arcR),
-      clockwise: false,
-    );
+    if (arcR > 0) {
+      path.arcToPoint(
+        Offset(l + arcR, arrowY - arcR),
+        radius: Radius.circular(arcR),
+        clockwise: false,
+      );
+    } else {
+      path.lineTo(l, arrowY);
+    }
     path.lineTo(bodyLeft, arrowY - arrowSize);
 
     // Close top-left corner
@@ -412,5 +420,14 @@ class _BubblePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_BubblePainter oldDelegate) => true;
+  bool shouldRepaint(_BubblePainter oldDelegate) {
+    return arrowSize != oldDelegate.arrowSize ||
+        borderRadius != oldDelegate.borderRadius ||
+        arrowRadius != oldDelegate.arrowRadius ||
+        color != oldDelegate.color ||
+        borderColor != oldDelegate.borderColor ||
+        borderWidth != oldDelegate.borderWidth ||
+        side != oldDelegate.side ||
+        arrowPosition != oldDelegate.arrowPosition;
+  }
 }

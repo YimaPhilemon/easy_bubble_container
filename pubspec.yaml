@@ -5,7 +5,7 @@ homepage: https://github.com/YimaPhilemon/easy_bubble_container
 
 environment:
   sdk: ^3.7.2
-  flutter: ">=1.17.0"
+  flutter: ">=3.29.0"
 
 dependencies:
   flutter:
